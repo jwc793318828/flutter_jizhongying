@@ -9,8 +9,7 @@ class DioUtil {
   static final String GET = "get";
   static final String POST = "post";
   static final String DATA = "data";
-  static final String CODE = "errorCode";
-
+ 
   final bool isProxyChecked = true;
   final String proxy = "192.168.0.114:8888";
   final String BASE_URL = "";
