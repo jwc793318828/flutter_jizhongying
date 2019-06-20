@@ -9,7 +9,7 @@ class DioUtil {
   static final String GET = "get";
   static final String POST = "post";
   static final String DATA = "data";
- 
+
   final bool isProxyChecked = true;
   final String proxy = "192.168.0.114:8888";
   final String BASE_URL = "";
@@ -27,20 +27,21 @@ class DioUtil {
     dio = Dio(BaseOptions(
       baseUrl: BASE_URL,
       headers: {'platform': 'android' },
-      // ignore: argument_type_not_assignable
-      connectTimeout: 5000,
+       connectTimeout: 5000,
       receiveTimeout: 100000,
     ));
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
-        return isProxyChecked && Platform.isAndroid;
+    if(isProxyChecked){
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return isProxyChecked && Platform.isAndroid;
+        };
+        client.findProxy = (url) {
+          return  'PROXY $proxy' ;
+        };
       };
-      client.findProxy = (url) {
-        return isProxyChecked ? 'PROXY $proxy' : 'DIRECT';
-      };
-    };
+    }
   }
 
   //get请求
@@ -132,7 +133,6 @@ class DioUtil {
         "token1": "dddddddddd"
       }; // 可以传递的公共参数
       opt.headers.addAll(map);
-
       return opt;
     }));
   }
